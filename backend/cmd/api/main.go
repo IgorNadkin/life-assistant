@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"life-assistant/internal/app"
+	"backend/internal/app"
 )
 
 func main() {
