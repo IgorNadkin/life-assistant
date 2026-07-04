@@ -12,6 +12,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.Println("server started :8080")
+
 	if err := application.Run(); err != nil {
 		log.Fatal(err)
 	}
