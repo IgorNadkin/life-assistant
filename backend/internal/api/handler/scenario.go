@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -49,6 +50,7 @@ func (h *ScenarioHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	id, err := h.scenarioService.CreateScenario(s)
 	if err != nil {
+		log.Printf("[ScenarioHandler.Create] %v", err)
 		http.Error(w, "failed to create scenario", http.StatusInternalServerError)
 		return
 	}
@@ -130,6 +132,7 @@ func (h *ScenarioHandler) Delete(w http.ResponseWriter, r *http.Request) {
 func (h *ScenarioHandler) List(w http.ResponseWriter, r *http.Request) {
 	scenarios, err := h.scenarioService.ListScenarios()
 	if err != nil {
+		log.Printf("[ScenarioHandler.List] %v", err)
 		http.Error(w, "failed to list scenarios", http.StatusInternalServerError)
 		return
 	}

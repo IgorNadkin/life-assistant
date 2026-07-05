@@ -1,4 +1,4 @@
-.PHONY: help build run test db-up db-down migrate clean deps
+.PHONY: help build run test db-up db-down migrate migrate-status clean deps
 
 help:
 	@echo "Life Assistant - Available commands:"
@@ -10,7 +10,8 @@ help:
 	@echo "  make db-up          - Start PostgreSQL with Docker Compose"
 	@echo "  make db-down        - Stop PostgreSQL"
 	@echo "  make db-logs        - Show database logs"
-	@echo "  make migrate        - Run database migrations"
+	@echo "  make migrate        - Run database migrations (idempotent, tracked)"
+	@echo "  make migrate-status - Show which migrations are applied/pending"
 	@echo "  make clean          - Clean build artifacts"
 	@echo "  make deps           - Download dependencies"
 	@echo "  make fmt            - Format code"
@@ -49,9 +50,10 @@ db-logs:
 	cd backend && docker-compose logs -f postgres
 
 migrate:
-	@echo "Running migrations..."
-	@echo "Migrations are automatically applied on app startup"
-	@echo "See backend/migrations/ for migration files"
+	@bash scripts/migrate.sh
+
+migrate-status:
+	@bash scripts/migrate.sh status
 
 clean:
 	@echo "Cleaning build artifacts..."
@@ -83,5 +85,7 @@ docker-run: docker-build
 postman:
 	@echo "Postman collection available at: postman_collection.json"
 	@echo "Import into Postman for API testing"
+	chmod +x scripts/test_api.sh
+	./scripts/test_api.sh
 
 .DEFAULT_GOAL := help

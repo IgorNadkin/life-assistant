@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -69,6 +70,7 @@ func (h *EngineHandler) Start(w http.ResponseWriter, r *http.Request) {
 
 	state, err := h.scenarioService.StartScenario(req.UserID, req.ScenarioID)
 	if err != nil {
+		log.Printf("[EngineHandler.Start] %v", err)
 		http.Error(w, "failed to start scenario", http.StatusInternalServerError)
 		return
 	}
@@ -77,9 +79,9 @@ func (h *EngineHandler) Start(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"state_id":      state.ID,
-		"current_node":  currentNode,
-		"status":        state.Status,
+		"state_id":     state.ID,
+		"current_node": currentNode,
+		"status":       state.Status,
 	})
 }
 

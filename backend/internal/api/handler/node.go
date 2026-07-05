@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -29,7 +30,8 @@ type CreateNodeRequest struct {
 	Order          int     `json:"order"`
 }
 
-type NodeResponse struct {
+// backend/internal/api/handler/node.go
+type NodeDetailResponse struct { // было NodeResponse
 	ID             int64   `json:"id"`
 	ScenarioID     int64   `json:"scenario_id"`
 	Type           string  `json:"type"`
@@ -64,6 +66,7 @@ func (h *NodeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	id, err := h.nodeService.CreateNode(node)
 	if err != nil {
+		log.Printf("[NodeHandler.Create] %v", err)
 		http.Error(w, "failed to create node", http.StatusInternalServerError)
 		return
 	}

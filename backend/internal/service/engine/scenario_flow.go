@@ -59,9 +59,9 @@ func (sf *ScenarioFlow) CreateActionFromNode(stateID int64, node *graph.Node) (*
 	action := &user.UserAction{
 		UserStateID:  stateID,
 		NodeID:       node.ID,
-		Action:       node.ActionType,
+		Action:       derefString(node.ActionType),
 		Organization: *node.Organization,
-		Deadline:     nil, // Could be parsed from node.Deadline
+		Deadline:     nil,
 		Completed:    false,
 	}
 
@@ -72,4 +72,11 @@ func (sf *ScenarioFlow) CreateActionFromNode(stateID int64, node *graph.Node) (*
 
 	action.ID = id
 	return action, nil
+}
+
+func derefString(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
 }
