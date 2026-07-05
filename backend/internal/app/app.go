@@ -3,7 +3,7 @@ package app
 import (
 	"net/http"
 
-	"backend/internal/api/handler
+	"backend/internal/api/handler"
 	"backend/internal/config"
 	"backend/internal/repository/postgres"
 	"backend/internal/service"
@@ -50,7 +50,7 @@ func New() (*App, error) {
 	scenarioHandler := handler.NewScenarioHandler(scenarioService)
 	nodeHandler := handler.NewNodeHandler(nodeService)
 	edgeHandler := handler.NewEdgeHandler(edgeService)
-	engineHandler := handler.NewEngineHandler(scenarioService, userService, scenarioFlow)
+	engineHandler := handler.NewEngineHandler(scenarioService, userService, scenarioFlow, userStateRepo)
 
 	r := chi.NewRouter()
 
@@ -66,5 +66,5 @@ func New() (*App, error) {
 }
 
 func (a *App) Run() error {
-	return http.ListenAndServe(":"+a.cfg.Port, a.router)
+	return http.ListenAndServe(":" + a.cfg.Port, a.router)
 }

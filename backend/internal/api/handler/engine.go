@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"backend/internal/domain/user"
+	"backend/internal/repository"
 	"backend/internal/service"
 	"backend/internal/service/engine"
 )
@@ -14,17 +15,20 @@ type EngineHandler struct {
 	scenarioService *service.ScenarioService
 	userService     *service.UserService
 	scenarioFlow    *engine.ScenarioFlow
+	userStateRepo   repository.UserStateRepository
 }
 
 func NewEngineHandler(
 	scenarioService *service.ScenarioService,
 	userService *service.UserService,
 	scenarioFlow *engine.ScenarioFlow,
+	userStateRepo repository.UserStateRepository,
 ) *EngineHandler {
 	return &EngineHandler{
 		scenarioService: scenarioService,
 		userService:     userService,
 		scenarioFlow:    scenarioFlow,
+		userStateRepo:   userStateRepo,
 	}
 }
 
@@ -87,15 +91,8 @@ func (h *EngineHandler) Step(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	state, err := h.scenarioFlow.(*engine.ScenarioFlow).stateRepo.GetByID(req.UserStateID)
+	state, err := h.userStateRepo.GetByID(req.UserStateID)
 	if err != nil {
-		http.Error(w, "state not found", http.StatusNotFound)
-		return
-	}
-
-	// This is a workaround - in production you'd expose stateRepo properly
-	// For now, we'll use the service to get state
-	if state == nil {
 		http.Error(w, "state not found", http.StatusNotFound)
 		return
 	}

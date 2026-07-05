@@ -1,6 +1,9 @@
 package handler
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 type HealthHandler struct{}
 
@@ -10,5 +13,5 @@ func NewHealthHandler() *HealthHandler {
 
 func (h *HealthHandler) Check(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"status":"ok"}`))
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }

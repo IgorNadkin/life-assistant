@@ -1,4 +1,4 @@
-package service
+package scenario
 
 import (
 	"backend/internal/domain/scenario"
