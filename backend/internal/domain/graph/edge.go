@@ -1,7 +1,9 @@
 package graph
 
 type Edge struct {
-	From      int64
-	To        int64
-	Condition string
+	ID        int64   `db:"id"`
+	FromNode  int64   `db:"from_node"`
+	ToNode    int64   `db:"to_node"`
+	Condition string  `db:"condition"`
+	Logic     *string `db:"logic"`
 }
